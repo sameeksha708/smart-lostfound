@@ -75,12 +75,13 @@ const ItemCard = ({
           </div>
 
           {userEmail && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <User className="w-4 h-4 shrink-0" />
-              <span className="line-clamp-1 text-xs">{userEmail}</span>
-            </div>
-          )}
-        </div>
+  <div className="flex items-center gap-2 text-muted-foreground">
+    <User className="w-4 h-4 shrink-0" />
+   <span className="line-clamp-1 text-[11px] italic text-muted-foreground">
+  Reported by: {userEmail}
+</span>
+  </div>
+)}
 
         {status !== "active" && (
           <Badge variant="outline" className="mt-2">
