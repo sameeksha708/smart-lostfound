@@ -9,13 +9,13 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Custom color palette - Teal and Warm tones */
-    --background: 174 29% 26%;
+    --background: 0 32% 20%;
     --foreground: 0 14% 86%;
 
-    --card: 0 30% 20%;
+    --card: 174 29% 26%;
     --card-foreground: 0 14% 86%;
 
-    --popover: 0 30% 20%;
+    --popover: 174 29% 26%;
     --popover-foreground: 0 14% 86%;
 
     /* Primary - Medium Teal */
@@ -32,7 +32,7 @@ All colors MUST be HSL.
     --muted-foreground: 0 14% 75%;
 
     /* Accent - Dark Brown */
-    --accent: 0 30% 20%;
+    --accent: 0 32% 20%;
     --accent-foreground: 0 0% 100%;
 
     /* Lost items - Amber warning */
@@ -58,7 +58,7 @@ All colors MUST be HSL.
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(174 25% 47%), hsl(174 25% 57%));
-    --gradient-card: linear-gradient(180deg, hsl(0 30% 20%), hsl(0 30% 23%));
+    --gradient-card: linear-gradient(180deg, hsl(174 29% 26%), hsl(174 29% 28%));
 
     /* Shadows */
     --shadow-soft: 0 2px 8px -2px hsl(0 30% 20% / 0.08);
