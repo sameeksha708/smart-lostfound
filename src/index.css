@@ -9,27 +9,27 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Custom color palette - Teal and Warm tones */
-    --background: 0 14% 86%;
-    --foreground: 0 30% 20%;
+    --background: 174 29% 26%;
+    --foreground: 0 14% 86%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 30% 20%;
+    --card: 0 30% 20%;
+    --card-foreground: 0 14% 86%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 30% 20%;
+    --popover: 0 30% 20%;
+    --popover-foreground: 0 14% 86%;
 
     /* Primary - Medium Teal */
     --primary: 174 25% 47%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 174 25% 57%;
 
-    /* Secondary - Dark Teal */
-    --secondary: 174 29% 26%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Light accents */
+    --secondary: 0 14% 86%;
+    --secondary-foreground: 0 30% 20%;
 
     /* Muted */
-    --muted: 0 14% 90%;
-    --muted-foreground: 174 15% 35%;
+    --muted: 174 25% 35%;
+    --muted-foreground: 0 14% 75%;
 
     /* Accent - Dark Brown */
     --accent: 0 30% 20%;
@@ -50,15 +50,15 @@ All colors MUST be HSL.
     --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 0 14% 75%;
-    --input: 0 14% 75%;
-    --ring: 174 25% 47%;
+    --border: 174 20% 40%;
+    --input: 174 20% 35%;
+    --ring: 174 25% 57%;
 
     --radius: 0.75rem;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(174 25% 47%), hsl(174 25% 57%));
-    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 14% 90%));
+    --gradient-card: linear-gradient(180deg, hsl(0 30% 20%), hsl(0 30% 23%));
 
     /* Shadows */
     --shadow-soft: 0 2px 8px -2px hsl(0 30% 20% / 0.08);
