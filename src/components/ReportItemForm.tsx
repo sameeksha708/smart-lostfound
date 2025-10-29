@@ -20,14 +20,38 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
     description: "",
     location: "",
     dateOccurred: "",
-    imageUrl: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      let imageUrl = null;
+
+      // Upload image if selected
+      if (imageFile) {
+        setUploading(true);
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${userId}/${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('item-images')
+          .upload(fileName, imageFile);
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('item-images')
+          .getPublicUrl(fileName);
+
+        imageUrl = publicUrl;
+        setUploading(false);
+      }
+
       const { error } = await supabase.from("items").insert({
         user_id: userId,
         type,
@@ -35,7 +59,7 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
         description: formData.description || null,
         location: formData.location,
         date_occurred: formData.dateOccurred,
-        image_url: formData.imageUrl || null,
+        image_url: imageUrl,
         status: "active",
       });
 
@@ -49,12 +73,13 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
         description: "",
         location: "",
         dateOccurred: "",
-        imageUrl: "",
       });
+      setImageFile(null);
     } catch (error: any) {
       toast.error(error.message || "Failed to report item");
     } finally {
       setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -117,22 +142,23 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="imageUrl">Image URL (optional)</Label>
+            <Label htmlFor="image">Item Image (optional)</Label>
             <Input
-              id="imageUrl"
-              type="url"
-              placeholder="https://example.com/image.jpg"
-              value={formData.imageUrl}
-              onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files?.[0] || null)}
             />
-            <p className="text-xs text-muted-foreground">
-              Paste a URL to an image of the item (file upload coming soon)
-            </p>
+            {imageFile && (
+              <p className="text-xs text-muted-foreground">
+                Selected: {imageFile.name}
+              </p>
+            )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Submit Report
+          <Button type="submit" className="w-full" disabled={loading || uploading}>
+            {(loading || uploading) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {uploading ? "Uploading Image..." : "Submit Report"}
           </Button>
         </form>
       </CardContent>
