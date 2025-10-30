@@ -129,7 +129,7 @@ const BrowseItems = ({ userId }: BrowseItemsProps) => {
               type={item.type}
               status={item.status}
               userEmail={item.profiles?.email}
-              showClaimButton={item.user_id !== userId}
+              showClaimButton={item.user_id !== userId && item.type === "found"}
               onClaim={setSelectedItem}
             />
           ))}
