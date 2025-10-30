@@ -11,8 +11,10 @@ import { Loader2, Shield } from "lucide-react";
 const AdminAuth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accessCode, setAccessCode] = useState("");
 
   useEffect(() => {
     // Check if user is already logged in and is admin
@@ -69,6 +71,55 @@ const AdminAuth = () => {
     }
   };
 
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Sign up the user
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/admin/dashboard`
+        }
+      });
+
+      if (error) throw error;
+
+      if (!data.user) {
+        throw new Error("Failed to create admin account");
+      }
+
+      // Assign admin role using the security function
+      const { data: assignResult, error: assignError } = await supabase.rpc(
+        'assign_admin_role',
+        { 
+          _user_id: data.user.id, 
+          _access_code: accessCode 
+        }
+      );
+
+      if (assignError) throw assignError;
+
+      if (!assignResult) {
+        // If the code was wrong, delete the user account
+        await supabase.auth.admin.deleteUser(data.user.id);
+        throw new Error("Invalid admin access code. Please try again with the correct code.");
+      }
+
+      toast.success("Admin account created successfully! You can now sign in.");
+      setIsSignUp(false);
+      setEmail("");
+      setPassword("");
+      setAccessCode("");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to create admin account");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -82,11 +133,15 @@ const AdminAuth = () => {
 
         <Card className="shadow-medium border-border">
           <CardHeader>
-            <CardTitle>Admin Login</CardTitle>
-            <CardDescription>Enter your admin credentials</CardDescription>
+            <CardTitle>{isSignUp ? "Admin Registration" : "Admin Login"}</CardTitle>
+            <CardDescription>
+              {isSignUp 
+                ? "Create a new admin account with the access code" 
+                : "Enter your admin credentials"}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSignIn} className="space-y-4">
+            <form onSubmit={isSignUp ? handleSignUp : handleSignIn} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="admin-email">Admin Email</Label>
                 <Input
@@ -106,12 +161,47 @@ const AdminAuth = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  minLength={6}
                 />
               </div>
+              
+              {isSignUp && (
+                <div className="space-y-2">
+                  <Label htmlFor="access-code">What is the admin-access code? *</Label>
+                  <Input
+                    id="access-code"
+                    type="text"
+                    placeholder="Enter the admin access code"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Contact your system administrator for the access code
+                  </p>
+                </div>
+              )}
+
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Sign In as Admin
+                {isSignUp ? "Create Admin Account" : "Sign In as Admin"}
               </Button>
+
+              <div className="text-center pt-2">
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={() => {
+                    setIsSignUp(!isSignUp);
+                    setAccessCode("");
+                  }}
+                  className="text-sm"
+                >
+                  {isSignUp 
+                    ? "Already have an admin account? Sign in" 
+                    : "Need to create an admin account? Sign up"}
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
