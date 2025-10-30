@@ -23,6 +23,66 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
+  const [showAnalysis, setShowAnalysis] = useState(false);
+
+  const handleAnalyze = async () => {
+    if (!imageFile && !formData.description) {
+      toast.error("Please provide an image or description to analyze");
+      return;
+    }
+
+    setAnalyzing(true);
+    setAiAnalysis(null);
+
+    try {
+      let imageUrl = null;
+
+      // Upload image temporarily if selected
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${userId}/${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('item-images')
+          .upload(fileName, imageFile);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('item-images')
+          .getPublicUrl(fileName);
+
+        imageUrl = publicUrl;
+      }
+
+      // Call AI analysis edge function
+      const { data, error } = await supabase.functions.invoke('analyze-item', {
+        body: {
+          imageUrl,
+          description: formData.description,
+          name: formData.name
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setAiAnalysis(data.analysis);
+      setShowAnalysis(true);
+      toast.success("AI analysis complete!");
+
+    } catch (error: any) {
+      console.error("Analysis error:", error);
+      toast.error(error.message || "Failed to analyze item");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,11 +112,16 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
         setUploading(false);
       }
 
+      // Use AI-enhanced description if available
+      const finalDescription = aiAnalysis 
+        ? `${formData.description}\n\n--- AI Analysis ---\n${aiAnalysis}`
+        : formData.description || null;
+
       const { error } = await supabase.from("items").insert({
         user_id: userId,
         type,
         name: formData.name,
-        description: formData.description || null,
+        description: finalDescription,
         location: formData.location,
         date_occurred: formData.dateOccurred,
         image_url: imageUrl,
@@ -75,6 +140,8 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
         dateOccurred: "",
       });
       setImageFile(null);
+      setAiAnalysis(null);
+      setShowAnalysis(false);
     } catch (error: any) {
       toast.error(error.message || "Failed to report item");
     } finally {
@@ -156,7 +223,31 @@ const ReportItemForm = ({ type, userId }: ReportItemFormProps) => {
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading || uploading}>
+          {type === "lost" && (imageFile || formData.description) && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full"
+              onClick={handleAnalyze}
+              disabled={analyzing || loading}
+            >
+              {analyzing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {analyzing ? "Analyzing with AI..." : "🔍 Analyze with AI"}
+            </Button>
+          )}
+
+          {showAnalysis && aiAnalysis && (
+            <Card className="bg-muted/50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm">AI Analysis</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm whitespace-pre-wrap">{aiAnalysis}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          <Button type="submit" className="w-full" disabled={loading || uploading || analyzing}>
             {(loading || uploading) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             {uploading ? "Uploading Image..." : "Submit Report"}
           </Button>
