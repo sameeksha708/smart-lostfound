@@ -1,73 +1,198 @@
-# Welcome to your Lovable project
+# 🎒 Smart Lost & Found System
+🚀 A modern campus recovery system with secure claims, admin verification, and real-time tracking.
 
-## Project info
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue)
+![Supabase](https://img.shields.io/badge/Supabase-green)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-cyan)
 
-**URL**: https://lovable.dev/projects/cdd90bac-6136-403e-956c-040cc03a3c0c
+> Helping students reconnect with their lost belongings.
 
-## How can I edit this code?
+A secure campus-focused Lost & Found platform that enables users to report lost items, browse found items, and recover belongings through a verified ownership claim workflow. Built with authentication, role-based access control, and secure database policies to ensure trusted item recovery.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## 📸 Application Preview
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cdd90bac-6136-403e-956c-040cc03a3c0c) and start prompting.
+<table>
+  <tr>
+    <td><img src="screenshots/preview.png" width="250"/></td>
+    <td><img src="screenshots/admin-login.png" width="250"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/admin-dashboard.png" width="250"/></td>
+    <td><img src="screenshots/student-login.png" width="250"/></td>    
+  </tr>
+  <tr>
+    <td><img src="screenshots/student-dash.png" width="250"/></td>
+    <td><img src="screenshots/report-lost.png" width="250"/></td>
+  </tr>
+</table>
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🚀 Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 📦 Lost & Found Management
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* Report lost and found items
+* Upload item images and descriptions
+* Track item status
+* Browse available listings
 
-Follow these steps:
+### 🔍 Search & Discovery
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+* Browse found items
+* Search and filter listings
+* View item details and recovery status
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### ✅ Ownership Claim Workflow
 
-# Step 3: Install the necessary dependencies.
-npm i
+* Submit ownership claims
+* Verification-based recovery process
+* Claim tracking and status updates
+* Administrative approval workflow
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### 🔐 Authentication & Access Control
+
+* Secure user authentication
+* Protected routes
+* Role-based administrator access
+* Server-side authorization checks
+
+### 📱 Responsive User Experience
+
+* Mobile-friendly design
+* Modern and intuitive interface
+* Optimized for desktop and mobile devices
+
+---
+
+## ⚡ Technical Highlights
+
+* Full-stack React + Supabase application
+* Role-Based Access Control (RBAC)
+* Row-Level Security (RLS) policies
+* Secure image storage and retrieval
+* Form validation using Zod
+* Real-time data synchronization using TanStack Query
+* Responsive UI built with Tailwind CSS and shadcn/ui
+
+---
+
+## 🛠️ Tech Stack
+
+| Category         | Technology            |
+| ---------------- | --------------------- |
+| Frontend         | React 18              |
+| Language         | TypeScript            |
+| Build Tool       | Vite                  |
+| Styling          | Tailwind CSS          |
+| UI Components    | shadcn/ui             |
+| Backend          | Supabase              |
+| Database         | PostgreSQL            |
+| Authentication   | Supabase Auth         |
+| State Management | TanStack Query        |
+| Validation       | React Hook Form + Zod |
+
+---
+
+## 🏗️ Architecture
+
+```text
+Users
+   │
+   ▼
+Authentication Layer
+   │
+   ▼
+Lost & Found Portal
+   │
+   ├── Report Items
+   ├── Browse Listings
+   └── Submit Claims
+            │
+            ▼
+    Admin Verification
+            │
+            ▼
+      Item Recovery
+```
+
+---
+
+## 🎯 Why I Built This
+
+Students frequently lose personal belongings on campus, while existing recovery processes are often informal and inefficient.
+
+I built Smart Lost & Found System to provide a centralized platform where lost and found items can be reported, searched, and verified securely. The project also gave me hands-on experience with authentication, access control, database security, and full-stack application development.
+
+---
+
+## 📦 Installation
+
+### Clone Repository
+
+```bash
+git clone <https://github.com/sameeksha708/smart-lostfound.git>
+cd smart-lostfound
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Start Development Server
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Application runs at:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```text
+http://localhost:5173
+```
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🔮 Roadmap
 
-## What technologies are used for this project?
+* AI-powered image matching
+* Email notifications
+* In-app messaging
+* Advanced search filters
+* QR-code based item claiming
+* Analytics dashboard
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📚 Learning Outcomes
 
-## How can I deploy this project?
+This project helped me explore:
 
-Simply open [Lovable](https://lovable.dev/projects/cdd90bac-6136-403e-956c-040cc03a3c0c) and click on Share -> Publish.
+* Full-Stack Web Development
+* Authentication & Authorization
+* Database Security
+* Role-Based Access Control (RBAC)
+* Row-Level Security (RLS)
+* CRUD Operations
+* Responsive UI Development
+* Real-World Problem Solving
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 👩‍💻 Author
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**Sameeksha Kondi**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* GitHub: https://github.com/sameeksha708
+* LinkedIn: https://www.linkedin.com/in/sameekshakondi/
+
+---
+
+## 📄 License
+
+MIT License
