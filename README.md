@@ -30,6 +30,11 @@ A secure campus-focused Lost & Found platform that enables users to report lost 
 </table>
 
 ---
+## 🌐 Live Demo
+
+🚀 Try the app here:  
+👉 https://smart-lostfound.lovable.app
+
 
 ## 🚀 Features
 
